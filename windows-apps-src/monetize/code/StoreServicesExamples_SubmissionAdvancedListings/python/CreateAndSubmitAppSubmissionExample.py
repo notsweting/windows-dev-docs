@@ -40,7 +40,10 @@ submission["allowTargetFutureDeviceFamilies"] = samples.get_device_families_obje
 # The app must have the hasAdvancedListingPermission set to True in order for gaming options
 # and trailers to be applied. If that's not the case, you can still update the app and
 # its submissions through the API, but gaming options and trailers won't be saved.
-if not "hasAdvancedListingPermission" in app or not app["hasAdvancedListingPermission"]:
+if (
+    "hasAdvancedListingPermission" not in app
+    or not app["hasAdvancedListingPermission"]
+):
     print("This application does not support gaming options or trailers.")
 else:
     submission["gamingOptions"] = [samples.get_gaming_options_object()]
