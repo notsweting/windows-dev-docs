@@ -28,9 +28,9 @@ class DevCenterClient(object):
     def __init__(self, base_uri, access_token):
         self.base_uri = base_uri
         self.request_headers = {
-            "Authorization": "Bearer " + access_token,
+            "Authorization": f"Bearer {access_token}",
             "Content-type": "application/json",
-            "User-Agent": "Python"
+            "User-Agent": "Python",
         }
 
     def get_application(self, application_id):
@@ -106,16 +106,14 @@ class DevCenterClient(object):
         return self._invoke("DELETE", path)
 
     def _invoke(self, method, path, obj=None):
-        body = ""
-        if not obj is None:
-            body = json.dumps(obj)
+        body = json.dumps(obj) if obj is not None else ""
         conn = http.client.HTTPSConnection(self.base_uri)
         conn.request(method, path, body, self.request_headers)
         response = conn.getresponse()
         response_body = response.read().decode()
         response_body_length = int(response.headers["Content-Length"])
         response_obj = None
-        if not response_body is None and response_body_length != 0:
+        if response_body is not None and response_body_length != 0:
             response_obj = json.loads(response_body)
         response_ok = self._response_ok(response)
         conn.close()
